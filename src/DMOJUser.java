@@ -23,8 +23,6 @@ public class DMOJUser {
     public String getResponse(String request) throws Exception{
         System.out.println("Processing request: " + request);
 
-
-
         URL url = new URL(request);
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
         BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -89,16 +87,10 @@ public class DMOJUser {
                         String problemName = (String) problemInfo.get("name");
                         double problemPoints = (Double) problemInfo.get("points");
 
-                        boolean flag = true;
+                        DMOJProblem prob = new DMOJProblem(problemID, problemName, problemPoints);
 
-                        for (DMOJProblem p : this.solvedProblems){
-                            if (p.problemID.equals(problemID)){
-                                flag = false;
-                            }
-                        }
-
-                        if (flag)
-                            this.solvedProblems.add(new DMOJProblem(problemID, problemName, problemPoints));
+                        if (!this.solvedProblems.contains(prob))
+                            this.solvedProblems.add(prob);
                     }
                 } else {
                     throw new Exception("Error parsing submissions");

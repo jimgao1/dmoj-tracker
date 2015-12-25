@@ -13,7 +13,7 @@ public class DMOJProblem {
     }
 
     public boolean equals(DMOJProblem prob){
-        return this.problemID == prob.problemID;
+        return this.problemID.equals(prob.problemID);
     }
 
 }
