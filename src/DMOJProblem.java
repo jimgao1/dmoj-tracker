@@ -1,7 +1,7 @@
 /**
  * Created by Jim_Gao on 12/24/2015.
  */
-public class DMOJProblem {
+public class DMOJProblem implements Comparable<DMOJProblem>{
     public String problemID;
     public String problemName;
     public double pointValue;
@@ -16,4 +16,12 @@ public class DMOJProblem {
         return this.problemID.equals(prob.problemID);
     }
 
+    @Override
+    public int compareTo(DMOJProblem prob) {
+        return this.problemID.compareTo(prob.problemID);
+    }
+
+    public String toString(){
+        return this.problemName + "[" + this.problemID + "]";
+    }
 }

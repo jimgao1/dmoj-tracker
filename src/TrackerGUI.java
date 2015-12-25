@@ -1,7 +1,10 @@
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 
 /**
  * Created by Jim_Gao on 12/24/2015.
@@ -24,6 +27,20 @@ public class TrackerGUI extends JFrame implements ActionListener{
 
     public DMOJUser userLeft;
     public DMOJUser userRight;
+
+    public JTabbedPane problemsPanel;
+
+    public JPanel pnlBothSolved;
+    public JList lstBothSolved;
+    public DefaultListModel<String> lstModelBothSolved;
+
+    public JPanel pnlPersonA;
+    public JList lstPersonA;
+    public DefaultListModel<String> lstModelPersonA;
+
+    public JPanel pnlPersonB;
+    public JList lstPersonB;
+    public DefaultListModel<String> lstModelPersonB;
 
     public TrackerGUI(){
         setUIFont (new javax.swing.plaf.FontUIResource(new Font("Arial",Font.PLAIN, 16)));
@@ -74,8 +91,23 @@ public class TrackerGUI extends JFrame implements ActionListener{
         userPanel.add(leftUserPanel);
         userPanel.add(rightUserPanel);
 
-        userPanel.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() / 3));
+        userPanel.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() / 5));
         this.add(userPanel, BorderLayout.NORTH);
+
+        problemsPanel = new JTabbedPane();
+
+        lstModelBothSolved = new DefaultListModel<>();
+        lstModelPersonA = new DefaultListModel<>();
+        lstModelPersonB = new DefaultListModel<>();
+
+        pnlBothSolved = new JPanel();
+        pnlBothSolved.setLayout(new GridLayout(1, 1));
+        lstBothSolved = new JList(lstModelBothSolved);
+        pnlBothSolved.add(lstBothSolved);
+
+        problemsPanel.addTab("Solved by Both User", pnlBothSolved);
+
+        this.add(problemsPanel, BorderLayout.CENTER);
 
         this.repaint();
         this.revalidate();
@@ -112,6 +144,7 @@ public class TrackerGUI extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(null, "User Not Found");
                 userLeft = null;
                 this.txtUsernameLeft.setText("");
+                this.lblUserInfoLeft.setText("");
             }
         } else if (e.getActionCommand().equals("update_right")){
             userRight = new DMOJUser(this.txtUsernameRight.getText());
@@ -127,6 +160,26 @@ public class TrackerGUI extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(null, "User Not Found");
                 userRight = null;
                 this.txtUsernameRight.setText("");
+                this.lblUserInfoRight.setText("");
+            }
+        }
+
+        if (userRight.displayName != null && userLeft.displayName != null){
+            Collections.sort(userLeft.solvedProblems);
+            Collections.sort(userRight.solvedProblems);
+
+            for (DMOJProblem prob : userLeft.solvedProblems){
+                if (userRight.solvedProblems.contains(prob)){
+                    lstModelBothSolved.addElement(prob.toString());
+                } else {
+                    lstModelPersonA.addElement(prob.toString());
+                }
+            }
+
+            for (DMOJProblem prob : userRight.solvedProblems){
+                if (!userLeft.solvedProblems.contains(prob)){
+                    lstModelPersonB.addElement(prob.toString());
+                }
             }
         }
     }
