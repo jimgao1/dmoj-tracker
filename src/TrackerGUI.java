@@ -46,6 +46,8 @@ public class TrackerGUI extends JFrame implements ActionListener{
         txtUsernameLeft.setColumns(20);
         btnUpdateLeft = new JButton("Update");
         btnUpdateLeft.setActionCommand("update_left");
+        btnUpdateLeft.setPreferredSize(new Dimension(250, 30));
+        btnUpdateLeft.addActionListener(this);
 
         leftUserPanel.add(lblUsernameLeft);
         leftUserPanel.add(txtUsernameLeft);
@@ -61,6 +63,8 @@ public class TrackerGUI extends JFrame implements ActionListener{
         txtUsernameRight.setColumns(20);
         btnUpdateRight = new JButton("Update");
         btnUpdateRight.setActionCommand("update_right");
+        btnUpdateRight.setPreferredSize(new Dimension(250, 30));
+        btnUpdateRight.addActionListener(this);
 
         rightUserPanel.add(lblUsernameRight);
         rightUserPanel.add(txtUsernameRight);
@@ -70,7 +74,8 @@ public class TrackerGUI extends JFrame implements ActionListener{
         userPanel.add(leftUserPanel);
         userPanel.add(rightUserPanel);
 
-        this.add(userPanel, BorderLayout.CENTER);
+        userPanel.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() / 3));
+        this.add(userPanel, BorderLayout.NORTH);
 
         this.repaint();
         this.revalidate();
@@ -95,16 +100,34 @@ public class TrackerGUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("update_left")){
             userLeft = new DMOJUser(this.txtUsernameLeft.getText());
-            userLeft.updateProblems();
 
-            lblUserInfoLeft.setText("<html>Display Name: <b>" + userLeft.displayName +
-                    "</b><br>Total Points: <b>" + userLeft.totalPoints + "</b></html>");
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            userLeft.updateProblems();
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+            if (userLeft.displayName != null){
+                lblUserInfoLeft.setText("<html>Display Name: <b>" + userLeft.displayName +
+                        "</b><br>Total Points: <b>" + userLeft.totalPoints + "</b></html>");
+            } else {
+                JOptionPane.showMessageDialog(null, "User Not Found");
+                userLeft = null;
+                this.txtUsernameLeft.setText("");
+            }
         } else if (e.getActionCommand().equals("update_right")){
             userRight = new DMOJUser(this.txtUsernameRight.getText());
-            userRight.updateProblems();
 
-            lblUserInfoRight.setText("<html>Display Name: <b>" + userRight.displayName +
-                    "</b><br>Total Points: <b>" + userRight.totalPoints + "</b></html>");
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            userRight.updateProblems();
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+            if (userRight.displayName != null) {
+                lblUserInfoRight.setText("<html>Display Name: <b>" + userRight.displayName +
+                        "</b><br>Total Points: <b>" + userRight.totalPoints + "</b></html>");
+            } else {
+                JOptionPane.showMessageDialog(null, "User Not Found");
+                userRight = null;
+                this.txtUsernameRight.setText("");
+            }
         }
     }
 }

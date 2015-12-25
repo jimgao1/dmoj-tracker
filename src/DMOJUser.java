@@ -1,3 +1,4 @@
+import com.sun.javaws.progress.Progress;
 import org.json.JSONObject;
 
 import javax.net.ssl.*;
@@ -41,15 +42,16 @@ public class DMOJUser {
 
         try{
             // Create a trust manager that does not validate certificate chains
-            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return null;
+            TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                    }
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                    }
                 }
-                public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                }
-                public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                }
-            }
             };
 
             // Install the all-trusting trust manager
@@ -66,7 +68,6 @@ public class DMOJUser {
 
             // Install the all-trusting host verifier
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-
 
             JSONObject userInfo = new JSONObject(getResponse("https://dmoj.ca/api/user/info/" + this.userName));
             this.displayName = (String)userInfo.get("display_name");
@@ -89,13 +90,15 @@ public class DMOJUser {
 
                         DMOJProblem prob = new DMOJProblem(problemID, problemName, problemPoints);
 
-                        if (!this.solvedProblems.contains(prob))
+                        if (!this.solvedProblems.contains(prob)) {
                             this.solvedProblems.add(prob);
+                        }
                     }
                 } else {
                     throw new Exception("Error parsing submissions");
                 }
             }
+
 
         } catch (Exception ex){
             ex.printStackTrace();
