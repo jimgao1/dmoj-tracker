@@ -91,7 +91,7 @@ public class TrackerGUI extends JFrame implements ActionListener{
         userPanel.add(leftUserPanel);
         userPanel.add(rightUserPanel);
 
-        userPanel.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() / 5));
+        userPanel.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() / 4));
         this.add(userPanel, BorderLayout.NORTH);
 
         problemsPanel = new JTabbedPane();
@@ -106,6 +106,20 @@ public class TrackerGUI extends JFrame implements ActionListener{
         pnlBothSolved.add(lstBothSolved);
 
         problemsPanel.addTab("Solved by Both User", pnlBothSolved);
+
+        pnlPersonA = new JPanel();
+        pnlPersonA.setLayout(new GridLayout(1, 1));
+        lstPersonA = new JList(lstModelPersonA);
+        pnlPersonA.add(lstPersonA);
+
+        problemsPanel.addTab("Solved by First User", pnlPersonA);
+
+        pnlPersonB = new JPanel();
+        pnlPersonB.setLayout(new GridLayout(1, 1));
+        lstPersonB = new JList(lstModelPersonB);
+        pnlPersonB.add(lstPersonB);
+
+        problemsPanel.addTab("Solved by Second User", pnlPersonB);
 
         this.add(problemsPanel, BorderLayout.CENTER);
 
@@ -164,21 +178,26 @@ public class TrackerGUI extends JFrame implements ActionListener{
             }
         }
 
-        if (userRight.displayName != null && userLeft.displayName != null){
+        if (userRight != null && userLeft != null){
+            System.out.println("starting to sort");
+
             Collections.sort(userLeft.solvedProblems);
             Collections.sort(userRight.solvedProblems);
 
             for (DMOJProblem prob : userLeft.solvedProblems){
                 if (userRight.solvedProblems.contains(prob)){
                     lstModelBothSolved.addElement(prob.toString());
+                    System.out.println("Both solved: " + prob.toString());
                 } else {
                     lstModelPersonA.addElement(prob.toString());
+                    System.out.println("Person A: " + prob.toString());
                 }
             }
 
             for (DMOJProblem prob : userRight.solvedProblems){
                 if (!userLeft.solvedProblems.contains(prob)){
                     lstModelPersonB.addElement(prob.toString());
+                    System.out.println("Person B: " + prob.toString());
                 }
             }
         }

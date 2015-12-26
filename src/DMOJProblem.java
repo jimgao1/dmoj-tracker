@@ -12,7 +12,11 @@ public class DMOJProblem implements Comparable<DMOJProblem>{
         this.pointValue = value;
     }
 
-    public boolean equals(DMOJProblem prob){
+
+    @Override
+    public boolean equals(Object o){
+        if (!(o instanceof DMOJProblem)) return false;
+        DMOJProblem prob = (DMOJProblem) o;
         return this.problemID.equals(prob.problemID);
     }
 
@@ -22,6 +26,6 @@ public class DMOJProblem implements Comparable<DMOJProblem>{
     }
 
     public String toString(){
-        return this.problemName + "[" + this.problemID + "]";
+        return this.problemName + "  [" + this.problemID + "]";
     }
 }
