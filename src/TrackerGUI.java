@@ -1,4 +1,3 @@
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,9 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collections;
 
-/**
- * Created by Jim_Gao on 12/24/2015.
- */
+
 public class TrackerGUI extends JFrame implements ActionListener{
 
     public JPanel userPanel;
@@ -30,15 +27,15 @@ public class TrackerGUI extends JFrame implements ActionListener{
 
     public JTabbedPane problemsPanel;
 
-    public JPanel pnlBothSolved;
+    public JScrollPane pnlBothSolved;
     public JList lstBothSolved;
     public DefaultListModel<String> lstModelBothSolved;
 
-    public JPanel pnlPersonA;
+    public JScrollPane pnlPersonA;
     public JList lstPersonA;
     public DefaultListModel<String> lstModelPersonA;
 
-    public JPanel pnlPersonB;
+    public JScrollPane pnlPersonB;
     public JList lstPersonB;
     public DefaultListModel<String> lstModelPersonB;
 
@@ -100,24 +97,24 @@ public class TrackerGUI extends JFrame implements ActionListener{
         lstModelPersonA = new DefaultListModel<>();
         lstModelPersonB = new DefaultListModel<>();
 
-        pnlBothSolved = new JPanel();
-        pnlBothSolved.setLayout(new GridLayout(1, 1));
+        pnlBothSolved = new JScrollPane();
+        //pnlBothSolved.setLayout(new GridLayout(1, 1));
         lstBothSolved = new JList(lstModelBothSolved);
-        pnlBothSolved.add(lstBothSolved);
+        pnlBothSolved.setViewportView(lstBothSolved);
 
         problemsPanel.addTab("Solved by Both User", pnlBothSolved);
 
-        pnlPersonA = new JPanel();
-        pnlPersonA.setLayout(new GridLayout(1, 1));
+        pnlPersonA = new JScrollPane();
+        //pnlPersonA.setLayout(new GridLayout(1, 1));
         lstPersonA = new JList(lstModelPersonA);
-        pnlPersonA.add(lstPersonA);
+        pnlPersonA.setViewportView(lstPersonA);
 
         problemsPanel.addTab("Solved by First User", pnlPersonA);
 
-        pnlPersonB = new JPanel();
-        pnlPersonB.setLayout(new GridLayout(1, 1));
+        pnlPersonB = new JScrollPane();
+        //pnlPersonB.setLayout(new GridLayout(1, 1));
         lstPersonB = new JList(lstModelPersonB);
-        pnlPersonB.add(lstPersonB);
+        pnlPersonB.setViewportView(lstPersonB);
 
         problemsPanel.addTab("Solved by Second User", pnlPersonB);
 
