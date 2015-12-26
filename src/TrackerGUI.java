@@ -98,21 +98,18 @@ public class TrackerGUI extends JFrame implements ActionListener{
         lstModelPersonB = new DefaultListModel<>();
 
         pnlBothSolved = new JScrollPane();
-        //pnlBothSolved.setLayout(new GridLayout(1, 1));
         lstBothSolved = new JList(lstModelBothSolved);
         pnlBothSolved.setViewportView(lstBothSolved);
 
         problemsPanel.addTab("Solved by Both User", pnlBothSolved);
 
         pnlPersonA = new JScrollPane();
-        //pnlPersonA.setLayout(new GridLayout(1, 1));
         lstPersonA = new JList(lstModelPersonA);
         pnlPersonA.setViewportView(lstPersonA);
 
         problemsPanel.addTab("Solved by First User", pnlPersonA);
 
         pnlPersonB = new JScrollPane();
-        //pnlPersonB.setLayout(new GridLayout(1, 1));
         lstPersonB = new JList(lstModelPersonB);
         pnlPersonB.setViewportView(lstPersonB);
 
@@ -177,6 +174,10 @@ public class TrackerGUI extends JFrame implements ActionListener{
 
         if (userRight != null && userLeft != null){
             System.out.println("starting to sort");
+
+            lstModelBothSolved.clear();
+            lstModelPersonA.clear();
+            lstModelPersonB.clear();
 
             Collections.sort(userLeft.solvedProblems);
             Collections.sort(userRight.solvedProblems);
