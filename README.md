@@ -1,5 +1,7 @@
 # dmoj-tracker
 
+<img src="http://s2.postimg.org/793cz9prd/screenshot.png">
+
 Introduction
 ------
 This is a tool written in Java helps people compare progress with another user. It provides information of:
