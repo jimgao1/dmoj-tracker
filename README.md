@@ -20,7 +20,7 @@ Features
 
 To be implemented
 ------
-If you are interested in helping out, please feel free to submit poll requests, and I will respond as soon as possible. 
+If you are interested in helping out, please feel free to submit pull requests, and I will respond as soon as possible. 
 
 - Provides more information regarding the problem when clicked
 - Generates a list of problems that the given users have attempted (submission without any AC)
