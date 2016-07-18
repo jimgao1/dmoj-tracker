@@ -15,10 +15,12 @@ public class DMOJUser {
     public double totalPoints;
 
     public ArrayList<DMOJProblem> solvedProblems;
+    public ArrayList<DMOJProblem> unsolvedProblems;
 
     public DMOJUser(String name){
         this.userName = name;
         solvedProblems = new ArrayList<DMOJProblem>();
+        unsolvedProblems = new ArrayList<DMOJProblem>();
     }
 
     public String getResponse(String request) throws Exception{
@@ -81,25 +83,43 @@ public class DMOJUser {
 
                 if (submissions.get(submissionID) instanceof JSONObject){
                     String problemID = (String)((JSONObject) submissions.get(submissionID)).get("problem");
-                    String problemStatus = (String)((JSONObject) submissions.get(submissionID)).get("result");;
+                    String problemStatus = (String)((JSONObject) submissions.get(submissionID)).get("result");
 
-                    if (problemStatus.equals("AC")) {
-                        JSONObject problemInfo = new JSONObject(getResponse("https://dmoj.ca/api/problem/info/" + problemID));
-                        String problemName = (String) problemInfo.get("name");
-                        double problemPoints = (Double) problemInfo.get("points");
+                    JSONObject problemInfo = new JSONObject(getResponse("https://dmoj.ca/api/problem/info/" + problemID));
+                    String problemName = (String) problemInfo.get("name");
+                    double problemPoints = (Double) problemInfo.get("points");
 
-                        DMOJProblem prob = new DMOJProblem(problemID, problemName, problemPoints);
+                    DMOJProblem prob = new DMOJProblem(problemID, problemName, problemPoints);
 
-                        if (!this.solvedProblems.contains(prob)) {
-                            this.solvedProblems.add(prob);
-                        }
+                    if (problemStatus.equals("AC") && !this.solvedProblems.contains(prob)) {
+                        this.solvedProblems.add(prob);
                     }
                 } else {
                     throw new Exception("Error parsing submissions");
                 }
             }
 
+            subm = submissions.keys();
+            while(subm.hasNext()){
+                String submissionID = (String)subm.next();
 
+                if (submissions.get(submissionID) instanceof JSONObject){
+                    String problemID = (String)((JSONObject) submissions.get(submissionID)).get("problem");
+                    String problemStatus = (String)((JSONObject) submissions.get(submissionID)).get("result");
+
+                    JSONObject problemInfo = new JSONObject(getResponse("https://dmoj.ca/api/problem/info/" + problemID));
+                    String problemName = (String) problemInfo.get("name");
+                    double problemPoints = (Double) problemInfo.get("points");
+
+                    DMOJProblem prob = new DMOJProblem(problemID, problemName, problemPoints);
+
+                    if (!solvedProblems.contains(prob) && !unsolvedProblems.contains(prob)) {
+                        this.unsolvedProblems.add(prob);
+                    }
+                } else {
+                    throw new Exception("Error parsing submissions");
+                }
+            }
         } catch (Exception ex){
             ex.printStackTrace();
         }
