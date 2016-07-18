@@ -32,22 +32,28 @@ public class TrackerGUI extends JFrame implements ActionListener{
     public DefaultListModel<String> lstModelBothSolved;
 
     public JScrollPane pnlPersonA;
+    public JScrollPane pnlPersonAAttempted;
     public JList lstPersonA;
+    public JList lstPersonAAttempted;
     public DefaultListModel<String> lstModelPersonA;
+    public DefaultListModel<String> lstModelPersonAAttempted;
 
     public JScrollPane pnlPersonB;
+    public JScrollPane pnlPersonBAttempted;
     public JList lstPersonB;
+    public JList lstPersonBAttempted;
     public DefaultListModel<String> lstModelPersonB;
+    public DefaultListModel<String> lstModelPersonBAttempted;
 
     public TrackerGUI(){
         setUIFont (new javax.swing.plaf.FontUIResource(new Font("Arial",Font.PLAIN, 16)));
 
-        this.setSize(800, 500);
+        this.setSize(1100, 600);
         this.setVisible(true);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle("DMOJ Problem Tracker");
         this.setLayout(new BorderLayout());
-
+        //User panel
         userPanel = new JPanel();
         userPanel.setLayout(new GridLayout(1, 2));
 
@@ -90,12 +96,14 @@ public class TrackerGUI extends JFrame implements ActionListener{
 
         userPanel.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() / 4));
         this.add(userPanel, BorderLayout.NORTH);
-
+        //Problem panel
         problemsPanel = new JTabbedPane();
 
         lstModelBothSolved = new DefaultListModel<>();
         lstModelPersonA = new DefaultListModel<>();
         lstModelPersonB = new DefaultListModel<>();
+        lstModelPersonAAttempted = new DefaultListModel<>();
+        lstModelPersonBAttempted = new DefaultListModel<>();
 
         pnlBothSolved = new JScrollPane();
         lstBothSolved = new JList(lstModelBothSolved);
@@ -114,6 +122,20 @@ public class TrackerGUI extends JFrame implements ActionListener{
         pnlPersonB.setViewportView(lstPersonB);
 
         problemsPanel.addTab("Solved by Second User", pnlPersonB);
+
+        //Problems attempted by Person A but failed
+        pnlPersonAAttempted = new JScrollPane();
+        lstPersonAAttempted = new JList(lstModelPersonAAttempted);
+        pnlPersonAAttempted.setViewportView(lstPersonAAttempted);
+
+        problemsPanel.addTab("Failed attempt by First User", pnlPersonAAttempted);
+
+        //Problems attempted by Person B but failed
+        pnlPersonBAttempted = new JScrollPane();
+        lstPersonBAttempted = new JList(lstModelPersonBAttempted);
+        pnlPersonBAttempted.setViewportView(lstPersonBAttempted);
+
+        problemsPanel.addTab("Failed attempt by Second User", pnlPersonBAttempted);
 
         this.add(problemsPanel, BorderLayout.CENTER);
 
@@ -178,9 +200,13 @@ public class TrackerGUI extends JFrame implements ActionListener{
             lstModelBothSolved.clear();
             lstModelPersonA.clear();
             lstModelPersonB.clear();
+            lstModelPersonAAttempted.clear();
+            lstModelPersonBAttempted.clear();
 
             Collections.sort(userLeft.solvedProblems);
             Collections.sort(userRight.solvedProblems);
+            Collections.sort(userLeft.unsolvedProblems);
+            Collections.sort(userRight.unsolvedProblems);
 
             for (DMOJProblem prob : userLeft.solvedProblems){
                 if (userRight.solvedProblems.contains(prob)){
@@ -197,6 +223,16 @@ public class TrackerGUI extends JFrame implements ActionListener{
                     lstModelPersonB.addElement(prob.toString());
                     System.out.println("Person B: " + prob.toString());
                 }
+            }
+
+            for(DMOJProblem prob: userLeft.unsolvedProblems){
+                lstModelPersonAAttempted.addElement(prob.toString());
+                System.out.println("Person A failed: " + prob.toString());
+            }
+
+            for(DMOJProblem prob: userRight.unsolvedProblems){
+                lstModelPersonBAttempted.addElement(prob.toString());
+                System.out.println("Person B failed: " + prob.toString());
             }
         }
     }

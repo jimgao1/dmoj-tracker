@@ -17,7 +17,7 @@ public class DMOJProblem implements Comparable<DMOJProblem>{
     public boolean equals(Object o){
         if (!(o instanceof DMOJProblem)) return false;
         DMOJProblem prob = (DMOJProblem) o;
-        return this.problemID.equals(prob.problemID);
+        return this.problemID.trim().equals(prob.problemID.trim());
     }
 
     @Override
